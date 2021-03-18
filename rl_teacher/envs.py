@@ -5,6 +5,8 @@ import gym
 import numpy as np
 import scipy.misc as misc
 from gym.wrappers.time_limit import TimeLimit
+import PIL
+from PIL import Image
 
 def make_env(env_id):
     original_name = env_id
@@ -134,7 +136,8 @@ class CompressedPixelViewer(TransparentWrapper):
 
     def _preprocess(self, image):
         image = self._rgb2gray(image)
-        image = misc.imresize(image, [84, 84], 'bilinear')
+        #image = misc.imresize(image, [84, 84], 'bilinear')
+        image = np.array(Image.fromarray(image).resize((84,84),resample=PIL.Image.BILINEAR))
         image = image.astype(np.float32) / 128.0 - 1.0
         return image
 

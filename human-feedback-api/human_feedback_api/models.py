@@ -26,8 +26,8 @@ class Comparison(models.Model):
     created_at = models.DateTimeField('date created', auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True, db_index=True)
 
-    left_clip = models.ForeignKey(Clip, db_index=True, related_name="compared_on_the_left")
-    right_clip = models.ForeignKey(Clip, db_index=True, related_name="compared_on_the_right")
+    left_clip = models.ForeignKey(Clip, db_index=True, related_name="compared_on_the_left", on_delete=models.DO_NOTHING)
+    right_clip = models.ForeignKey(Clip, db_index=True, related_name="compared_on_the_right", on_delete=models.DO_NOTHING)
 
     shown_to_tasker_at = models.DateTimeField('time shown to tasker', db_index=True, blank=True, null=True)
     responded_at = models.DateTimeField('time response received', db_index=True, blank=True, null=True)
@@ -40,7 +40,7 @@ class Comparison(models.Model):
     note = models.TextField('note to be displayed along with the query', default="", blank=True)
 
     # The Binary Search/Sort Tree that this comparison belongs to. Only used for new-style experiments.
-    tree_node = models.ForeignKey('SortTree', null=True, blank=True, default=None)
+    tree_node = models.ForeignKey('SortTree', null=True, blank=True, default=None, on_delete=models.DO_NOTHING)
     # Whether this comparison is related to a pending clip for said node. Helper used for new-style experiments.
     relevant_to_pending_clip = models.BooleanField(default=False)
 
@@ -70,9 +70,9 @@ class Comparison(models.Model):
 class SortTree(models.Model):
     """ Extends a red-black tree to handle async clip sorting with equivalence. """
 
-    parent = models.ForeignKey('self', null=True, related_name='+')
-    left = models.ForeignKey('self', null=True, related_name='+')
-    right = models.ForeignKey('self', null=True, related_name='+')
+    parent = models.ForeignKey('self', null=True, related_name='+', on_delete=models.DO_NOTHING)
+    left = models.ForeignKey('self', null=True, related_name='+', on_delete=models.DO_NOTHING)
+    right = models.ForeignKey('self', null=True, related_name='+', on_delete=models.DO_NOTHING)
 
     pending_clips = models.ManyToManyField(Clip, related_name='pending_sort_locations')
     bound_clips = models.ManyToManyField(Clip, related_name='tree_bindings')

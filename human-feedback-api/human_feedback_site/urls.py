@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^comparisons/(.*)$', human_feedback_api.views.show_comparison, name='show_comparison'),
     url(r'^experiments/(.*)/ajax_response', human_feedback_api.views.ajax_response, name='ajax_response'),
     url(r'^experiments/(.*)$', human_feedback_api.views.respond, name='responses'),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^tree/(.*)$', human_feedback_api.views.tree, name='tree_viewer'),
     url(r'^clips/(.*)$', human_feedback_api.views.all_clips, name='all_clips'),
 ]
