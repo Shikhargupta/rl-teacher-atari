@@ -5,7 +5,9 @@ from time import sleep
 from multiprocessing import Process
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
 from keras import backend as K
 from scipy import stats
 
@@ -96,12 +98,12 @@ class OrdinalRewardModel(RewardModel):
         self._episodes_per_checkpoint = 100
 
         # Build and initialize our model
-        config = tf.ConfigProto(
+        config = tf.compat.v1.ConfigProto(
             # device_count={'GPU': 0},
             # log_device_placement=True,
         )
         config.gpu_options.per_process_gpu_memory_fraction = 0.35  # allow_growth = True
-        self.sess = tf.Session(config=config)
+        self.sess = tf.compat.v1.Session(config=config)
 
         self.obs_shape = env.observation_space.shape
         if stacked_frames > 0:

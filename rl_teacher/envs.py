@@ -147,7 +147,7 @@ class CompressedPixelViewer(TransparentWrapper):
         return ob
 
     def _step(self, a):
-        ob, reward, done, info = self.env._step(a)
+        ob, reward, done, info = self.env.step(a)
         ob = self._preprocess(ob)
         return ob, reward, done, info
 
@@ -159,7 +159,7 @@ class RandomStartPoint(TransparentWrapper):
 
     def _build_reset_option(self, nav_to_start):
         """ Takes a list of instructions and returns a saved environment state. """
-        self.env._reset()
+        self.env.reset()
         for command in nav_to_start:
             self.env.step(command)
         return self.clone_state()
@@ -183,7 +183,7 @@ class DoneOnLivesBelowThreshold(TransparentWrapper):
         self.threshold = threshold
 
     def _step(self, a):
-        ob, reward, done, info = super()._step(a)
+        ob, reward, done, info = super().step(a)
         return ob, reward, done or self.ale.lives() < self.threshold, info
 
 class UseReward(TransparentWrapper):

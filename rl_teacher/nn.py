@@ -1,7 +1,10 @@
 from math import ceil
+import sys
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+import tensorflow as tf2
 
 class FullyConnectedMLP(object):
     """Vanilla two hidden layer multi-layer perceptron"""
@@ -14,7 +17,7 @@ class FullyConnectedMLP(object):
         input_dim = np.prod(obs_shape) + np.prod(act_shape)
 
         self.model = Sequential()
-        self.model.add(Dense(h_size, input_dim=input_dim))
+        self.model.add(Dense(int(h_size), input_dim=int(input_dim)))
         self.model.add(LeakyReLU())
 
         self.model.add(Dropout(0.5))
@@ -25,6 +28,9 @@ class FullyConnectedMLP(object):
         self.model.add(Dense(1))
 
     def run(self, obs, act):
+        #print(obs)
+        #print(act)
+        #flat_obs = keras.layers.Flatten(obs)
         flat_obs = tf.contrib.layers.flatten(obs)
         x = tf.concat([flat_obs, act], axis=1)
         return self.model(x)
